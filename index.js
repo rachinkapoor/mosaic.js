@@ -7,7 +7,7 @@
 const Web3 = require('web3')
     , web3Utils = require('web3-utils')
 ;
-const InstanceComposer = require('./instance_composer');
+const InstanceComposer = require('./instanceComposer');
 const version = require('./package.json').version;
 
 require('./lib/contracts');

@@ -1,7 +1,7 @@
 "use strict";
 const Web3 = require('web3');
 
-const InstanceComposer = require('../instance_composer');
+const InstanceComposer = require('../instanceComposer');
 
 
 const AuxiliaryWeb3 = function ( originCoreContractAddress ) {

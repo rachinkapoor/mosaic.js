@@ -14,17 +14,11 @@ const shadowMap = {};
 InstanceComposer.register = function(
   ClassConstructor,
   getterMethodName,
-  mustRetainInstance,
-  constructorParamsBuilderFunction
+  mustRetainInstance
 ) {
-  if (composerMap.hasOwnProperty(getterMethodName) || shadowMap.hasOwnProperty(getterMethodName)) {
-    console.trace('Duplicate register Getter Method name', getterMethodName);
-    throw `Duplicate register Getter Method Name ${getterMethodName}`;
-  }
-
-  if (typeof constructorParamsBuilderFunction === 'function') {
-    //TBD: We need a shadow derived class here.
-    //ClassConstructor = DerivedClassConstructor
+  if ( InstanceComposer.prototype[getterMethodName] ) {
+    console.trace('Duplicate Getter Method name', getterMethodName);
+    throw 'Duplicate Getter Method Name ';
   }
 
   composerMap[getterMethodName] = ClassConstructor;
@@ -53,8 +47,8 @@ InstanceComposer.register = function(
 
 InstanceComposer.registerShadowableClass = function(ClassConstructor, classGetterName) {
   if (composerMap.hasOwnProperty(classGetterName) || shadowMap.hasOwnProperty(classGetterName)) {
-    console.trace('Duplicate registerShadowableClass Getter Method name', classGetterName);
-    throw `Duplicate registerShadowableClass Getter Method Name. ${classGetterName}`;
+    console.trace('Duplicate Getter Method name', classGetterName);
+    throw 'Duplicate Getter Method Name.';
   }
 
   shadowMap[classGetterName] = ClassConstructor;
@@ -76,17 +70,19 @@ InstanceComposer.prototype = {
   createShadowClass: function(ClassConstructor) {
     const oThis = this; //this refers to instance of InstanceComposer.
 
-    const basePrototype = ClassConstructor.prototype || {};
-    const derivedPrototype = Object.create(basePrototype);
+    class DerivedClass extends ClassConstructor {
+      constructor(...args) {
+        super(...args);
+      }
 
-    derivedPrototype[instanceComposerMethodName] = function() {
-      return oThis;
-    };
+      [instanceComposerMethodName]() {
+        return oThis;
+      }
+    }
 
-    const DerivedClass = function() {
-      ClassConstructor.apply(this, arguments);
-    };
-    DerivedClass.prototype = derivedPrototype;
+    //Aesthetics. 
+    DerivedClass.name = ClassConstructor.name;
+
     return DerivedClass;
   }
 };
