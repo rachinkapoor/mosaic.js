@@ -89,9 +89,22 @@ Mosaic.prototype = {
 }
 
 
+//Integrate AbiBinProvider
+const AbiBinProvider = require('./utils/AbiBinProvider');
+InstanceComposer.register(AbiBinProvider, 'AbiBinProvider', true);
+Mosaic.utils = {
+  AbiBinProvider: AbiBinProvider
+};
+
 module.exports = Mosaic;
 
 /*
+
+To Use ABI/BIN
+Mosaic = require('./index')
+abiBinProvider = new Mosaic.utils.AbiBinProvider();
+jsonInterface = abiBinProvider.getABI('EIP20TokenMock');
+contractBin = abiBinProvider.getBIN('EIP20TokenMock');
 
 //Web3 Way:
 web3 = new Web3("http://127.0.0.1:8545");

@@ -13,3 +13,13 @@ mosaic.aux('0x0000000000000000000000000000000000000002').getBlockNumber().then(c
 
 mosaic.aux('0x0000000000000000000000000000000000000001').getBlockNumber().then(console.log);
 ```
+
+
+
+# Using AbiBinProvider
+```js
+Mosaic = require('./index')
+abiBinProvider = new Mosaic.utils.AbiBinProvider();
+jsonInterface = abiBinProvider.getABI('EIP20TokenMock');
+contractBin = abiBinProvider.getBIN('EIP20TokenMock');
+```
